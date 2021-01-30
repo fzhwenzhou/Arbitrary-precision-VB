@@ -121,7 +121,7 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Dim num1(1 To 1000) As Integer, num2(1 To 1000) As Integer, p As Integer, out(1 To 1000) As Integer
+Dim num1(1 To 1000) As Integer, num2(1 To 1000) As Integer, p As Integer, out(1 To 1000000) As Integer
 Private Sub storage(str1, str2, num1, num2)
     For i = 1 To Len(str1)
         num1(i) = Val(Mid(str1, Len(str1) - i + 1, 1))
@@ -176,23 +176,45 @@ Private Function LMinus(str1 As String, str2 As String) As String
         End If
     Next i
     s = Len(str1)
-    For i = Len(str1) To 1 Step -1
-        If out(i) = 0 Then
-            s = s - 1
-        Else
-            Exit For
-        End If
-    Next i
+    Do While out(s) = 0 And s > 1
+        s = s - 1
+    Loop
     For i = 1 To s
         LMinus = LMinus + CStr(out(s - i + 1))
     Next i
 End Function
-Function LMultiply(str1 As String, str2 As String) As String
-    
+Private Function LMultiply(str1 As String, str2 As String) As String
+    Dim s As Integer
+    LMultiply = ""
+    Call storage(str1, str2, num1, num2)
+    For i = 1 To Len(str1)
+        p = 0
+        For j = 1 To Len(str2)
+            out(i + j - 1) = num1(i) * num2(j) + p + out(i + j - 1)
+            p = out(i + j - 1) \ 10
+            out(i + j - 1) = out(i + j - 1) Mod 10
+        Next j
+        out(i + Len(str2)) = p
+    Next i
+    s = Len(str1) + Len(str2)
+    Do While out(s) = 0 And s > 1
+        s = s - 1
+    Loop
+    For i = 1 To s
+        LMultiply = LMultiply + CStr(out(s - i + 1))
+    Next i
 End Function
 Private Sub Command1_Click()
+    For i = 1 To 1000
+        num1(i) = 0
+        num2(i) = 0
+    Next i
+    For i = 1 To 1000000
+        out(i) = 0
+    Next i
     If Option1 = True Then Text3.Text = LPlus(Text1.Text, Text2.Text)
     If Option2 = True Then Text3.Text = LMinus(Text1.Text, Text2.Text)
+    If Option3 = True Then Text3.Text = LMultiply(Text1.Text, Text2.Text)
 End Sub
 
 Private Sub Option1_Click()
