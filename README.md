@@ -1,2 +1,6 @@
 # Arbitrary-precision-VB
-Arbitrary-precision arithmetic in Visual Basic 6.0
+## Deprecated
+This project has been deprecated and no longer maintained. Please DO NOT use this project. 
+
+## Project Introduction
+Arbitrary-precision implemented in Visual Basic 6.0
